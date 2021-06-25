@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>COVID19 Vaccine Booking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="CSS/Css.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+	
+		<script>
+	$(document).ready(() => {
+	
+	var check = true;
+	
+	class jsonStorage {
+                constructor(product, model, item_num, distributors) {
+                    this.product = product;
+                    this.model = model;
+                    this.item_num = item_num;
+                    this.distributors = distributors;
+                }
+			}
+				
+			$(".loadData").click( () => {
+                $.ajax({
+                    type: "GET",
+                    url: "Json/product.json",
+                    dataType: "json",
+                    error: (e) => { console.log(e); },
+                    success: loadJson
+                })
+            });
+			
+	 function loadJson(data) {
+
+                $.each(data, (key, val) => {
+                    localStorage.setItem(val["product"], JSON.stringify(new jsonStorage("hajra",
+                        val["product"], val["model"], val["item_num"], val["distributors"])));
+				});
+                alert("Data has finished loading");
+				} 
+
+            $(".displayData").click(() => {
+
+                if (check) {
+                    var list = [];
+                    for (var i = 0; i < localStorage.length; i++) {
+                        var storage = localStorage.key(i);
+                        if (storage == "good") {
+                            console.log("good job");
+                        }
+                        else {
+                            list.push(JSON.parse(localStorage.getItem(storage)));
+                        }
+                    }
+
+                    for (var x = 0; x < list.length; x++) {
+
+                        $("#jsonList").append("<li id='vaccineData'>" + list[x]["product"] + "</li>");
+                    }
+                    check = false;
+                }
+                else
+                {
+                    alert("Data is being displayed");
+                }
+				
+			});
+				
+				 $("#jsonList").on('click', 'li', () => {
+                var $target = $(event.target);
+                var jsonObj = JSON.parse(localStorage.getItem(($target.text())));
+                $("#datailInfo").html("Date: " + jsonObj["report_date"]
+                    + "<br />Product: " + jsonObj["product"]
+                    + "<br />Model: " + jsonObj["model"]
+                    + "<br />Item Number: " + jsonObj["item_num"]
+                    + "<br />Distributors: " + jsonObj["distributors"]);
+				 });
+            });
+		
+	</script>
+	
+	</head>
+<body>
+		<div class="backGroundImg"></div>
+		<div class="container"> 
+			
+			<div class="mainHeader">
+				<header>
+					<p id = "mainIntro">Assignment #2 / Gursikh Hajra / 991571169</p>
+				</header>
+			</div>
+				
+				<div id="listContent">
+					<ul id="jsonList">
+					</ul>
+				</div>
+				
+				<div class="detail">
+					 <h2 id="datailTitle"> Vaccine Doses Detail Information</h2>
+					 <h4 id="datailInfo"> Select a record to view: </h4> 
+				</div>
+				
+				<div class = "mainFooter">
+					<footer>
+						<p id="Fordate">Hajra / Davis</p> 
+					</footer>
+				</div>
+	
+</body>
+	
+
+</html>

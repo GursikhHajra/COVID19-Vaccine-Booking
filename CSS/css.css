@@ -1,0 +1,13 @@
+backGroundImg
+{
+    background-image: url("../Image/backGround.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+	z-index: -1;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top:0;
+    bottom:0;
+}
